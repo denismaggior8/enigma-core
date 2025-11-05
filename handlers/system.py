@@ -9,5 +9,5 @@ def _help_cmd(params, is_query):
         if k == "HELP":
             continue
         h = _COMMANDS[k][1] or ""
-        lines.append("  AT+{} {}".format(k, h))
+        lines.append("  AT+{} - {}".format(k, h))
     return True, "\n".join(lines)

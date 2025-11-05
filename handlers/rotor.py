@@ -39,10 +39,7 @@ def  _rotor_cmd(params, is_query):
         rotor_type, ring, pos = cfg
         return True, f"+ROTOR: {idx},{rotor_type},{ring},{pos}"
 
-    # SET: expect exactly 4 params total (index + 3 others?) <-- we agreed fixed 4 params after index, but earlier you specified index + 3 or +4?
-    # You told earlier "fixed 4" after index; here we expect index + 3 values? adjust to index + 4 if needed.
-    # According to last definition: AT+ROTOR=<index>,<type>,<ring>,<position> -> that's 4 total including index? index + 3 body.
-    # We'll follow: index + 3 body (type, ring, position)
+
     if len(params) != 4:
         # If you meant index + 3, change to len(params) != 4 -> adjust comment. Current expects index + 3 body values -> len==4
         return False, "NEED 4 PARAMS"

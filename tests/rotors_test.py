@@ -12,7 +12,7 @@ class TestEnigmaCore(unittest.TestCase):
     def setUp(self):
         DeviceState().reset()   # ensures fresh state before each test
 
-    def test_set_and_query_rotor(self):
+    def test_at_set_and_query_rotor(self):
         out = process_line("AT+ROTOR=1,VI,0,0")
         # SET returns OK (no payload)
         self.assertIn("OK", out)
@@ -21,19 +21,19 @@ class TestEnigmaCore(unittest.TestCase):
         self.assertIn("+ROTOR: 1,VI,0,0", out2)
         self.assertIn("OK", out2)
 
-    def test_missing_index_set(self):
+    def test_at_set_rotor_missing_index(self):
         out = process_line("AT+ROTOR=VI,0,0")
         self.assertIn("ERROR", out)
 
-    def test_missing_index_query(self):
+    def test_at_get_rotor_missing_index(self):
         out = process_line("AT+ROTOR?")
         self.assertIn("ERROR", out)
 
-    def test_lowercase_rejected(self):
+    def test_at_set_rotor_lowercase_param(self):
         out = process_line("AT+ROTOR=1,vi,0,0")
         self.assertIn("ERROR", out)
 
-    def test_bad_number_param(self):
+    def test_at_set_rotor_bad_param_type(self):
         out = process_line("AT+ROTOR=1,VI,NN,0")
         self.assertIn("ERROR", out)
 

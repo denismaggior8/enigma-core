@@ -3,7 +3,7 @@ import sys
 import os
 # Add parent folder (where enigmacore.py lives) to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from enigmacore import process_line
+from main import process_line
 
 class TestEnigmaCore(unittest.TestCase):
     

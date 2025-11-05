@@ -1,9 +1,10 @@
-# atcore.py
-# Portable AT command handler: works on CPython (macOS) and MicroPython (USB CDC / stdin)
-# Drop on board as main.py or import as a module.
+# main.py
 
 import sys
 import time
+
+from at_registry import _COMMANDS, at_command
+import handlers  # triggers auto-import
 
 IS_MICROPY = sys.implementation.name == "micropython"
 
@@ -54,6 +55,10 @@ try:
 except Exception:
     def ticks_ms(): return int(time.time() * 1000)
     def ticks_diff(a, b): return a - b
+
+# ---------- import AT handlers ----------
+def load_handlers():
+    import handlers
 
 # ---------- Output helpers ----------
 def send_line(s):
@@ -131,14 +136,6 @@ def parse_at_line(line):
     cmd = tail.split()[0].strip().upper()
     return cmd, [], False
 
-# ---------- Registry ----------
-_COMMANDS = {}
-def at_command(name, help_text=""):
-    def deco(fn):
-        _COMMANDS[name.upper()] = (fn, help_text)
-        return fn
-    return deco
-
 def unregister(name):
     _COMMANDS.pop(name.upper(), None)
 
@@ -197,68 +194,6 @@ def _dispatch_at(cmd, params, is_query):
         return
     send_err()
 
-# ---------- Auto HELP ----------
-@at_command("HELP", "Show this help")
-def _help_cmd(params, is_query):
-    lines = ["Available commands:"]
-    lines.append("  AT - basic attention")
-    for k in sorted(_COMMANDS.keys()):
-        if k == "HELP":
-            continue
-        h = _COMMANDS[k][1] or ""
-        lines.append("  AT+{} {}".format(k, h))
-    return True, "\n".join(lines)
-
-# ---------- Example LED ----------
-try:
-    from machine import Pin
-    try:
-        _led = Pin("LED", Pin.OUT)
-    except Exception:
-        try:
-            _led = Pin(2, Pin.OUT)
-        except Exception:
-            _led = None
-except Exception:
-    _led = None
-
-@at_command("LED", "Control LED: AT+LED=0|1  AT+LED?")
-def _led_cmd(params, is_query):
-    if is_query:
-        if _led is None:
-            return False, "NO LED"
-        val = _led.value() if hasattr(_led, "value") else None
-        return True, "+LED: {}".format(1 if val else 0)
-    if not params:
-        return False, "NO PARAM"
-    p = params[0].upper()
-    if p in ("1", "ON", "TRUE"):
-        if _led is not None:
-            _led.value(1)
-        return True, None
-    if p in ("0", "OFF", "FALSE"):
-        if _led is not None:
-            _led.value(0)
-        return True, None
-    return False, "BAD PARAM"
-
-@at_command("ENIGMA", "Set/Get the Enigma machine model: AT+ENIGMA=M3|M4  AT+ENIGMA?")
-def _enigma_cmd(params, is_query):
-    global _enigma, _plugboard, _rotor1, _rotor2, _rotor3, _reflector
-    if is_query:
-        if _enigma is None:
-            return True, "+ENIGMA: NONE"
-        else:
-            return True, "+ENIGMA: M3"
-    if not params:
-        return False, "NO PARAM"
-    p = params[0].upper()
-    if p == "M3":
-        _enigma = EnigmaM3(_plugboard, _rotor1, _rotor2, _rotor3, _reflector, _etw)
-        return True, None
-    else:
-        return False, "BAD PARAM"
-
 # ---------- process_line() for unittest ----------
 def process_line(line: str) -> str:
     """Process a single input line and return CRLF-terminated string."""
@@ -296,6 +231,7 @@ def process_line(line: str) -> str:
 
 # ---------- Main loop ----------
 def run_loop(poll_interval=0.01, blocking_fallback_ok=True):
+    load_handlers()
     send_line("Enigma Core is ready to accept inputs")
     while True:
         try:

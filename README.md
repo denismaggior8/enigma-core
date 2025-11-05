@@ -37,17 +37,17 @@ Its primary purpose is to host a fully configurable Enigma machine emulator, but
 ```
 enigma-core/
 │
-├── main.py        # Main entrypoint (loop, AT parsing, dispatcher)
-├── at_decorators.py     # @at_command decorator + registry
-├── state.py             # DeviceState singleton
+├── main.py             # Main entrypoint (loop, AT parsing, dispatcher)
+├── at_registry.py      # @at_command decorator + registry
+├── device_state.py     # DeviceState singleton
 │
-├── handlers/            # AT command implementations
-│   ├── help.py
+├── handlers/           # AT command implementations
+│   ├── system.py
 │   ├── led.py
 |   ...
-│   └── enigma.py        # (work in progress)
+│   └── enigma.py       # (work in progress)
 │
-├── tests/               # Unittests (run under CPython)
+├── tests/              # Unittests (run under CPython)
 │   ├── test_help.py
 |   ...
 │   └── test_enigma.py
@@ -58,7 +58,7 @@ enigma-core/
 ## 🛠️ Running on PC (CPython)
 
 ```bash
-$ echo "AT+HELP" | python3 enigmacore.py
+$ echo "AT+HELP" | python3 main.py
 ```
 
 Expected output:

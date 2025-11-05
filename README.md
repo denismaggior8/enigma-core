@@ -66,7 +66,7 @@ Available commands:
   AT - basic attention
   AT+ENIGMA - Set/Get the Enigma machine model: AT+ENIGMA=M3|M4  AT+ENIGMA?
   AT+HELP - Show this help
-  AT+LED - Control LED: AT+LED=0|1  AT+LED?
+  ...
 OK
 ```
 

@@ -2,7 +2,7 @@
 from at_registry import at_command   # or from enigmacore import at_command if registry is there
 from device_state import DeviceState
 
-@at_command("ROTOR")
+@at_command("ROTOR", "Set/Get rotor configuration: AT+ROTOR=<index>,<type>,<ring>,<pos>  AT+ROTOR=<index>?")
 def  _rotor_cmd(params, is_query):
     """
     params: list of strings returned by parser

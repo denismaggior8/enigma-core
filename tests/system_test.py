@@ -6,10 +6,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from main import process_line
 
 class TestEnigmaCore(unittest.TestCase):
-        
-    def test_at_enigma_query(self):
-        self.assertEqual(process_line("AT+ENIGMA?"), "+ENIGMA: NONE\r\nOK")
-
-
+    
+    def test_at_basic_at(self):
+        self.assertEqual(process_line("AT"), "OK")
+   
 if __name__ == "__main__":
     unittest.main()

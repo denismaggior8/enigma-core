@@ -3,7 +3,7 @@
 **Enigma Core** is a standalone, embedded-ready AT command framework written in pure Python / MicroPython.  
 It is designed to run both on desktop (CPython) and on microcontrollers such as ESP32 and RP2040, with identical behavior.
 
-Its primary purpose is to host a fully configurable Enigma machine emulator, but it is also a generic platform for building AT-command-driven embedded applications.
+Its primary purpose is to host a fully configurable Enigma machine emulator on low-resource devices.
 
 ---
 

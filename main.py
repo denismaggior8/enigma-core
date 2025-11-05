@@ -63,58 +63,124 @@ def send_err(msg=None):
         send_line("ERROR")
 
 # ---------- Parameter parsing ----------
-def _split_params(s):
-    s = s.strip()
-    if not s:
+def _split_params(s: str):
+    """
+    Split comma-separated parameters, supporting bareword tokens (no quotes).
+    Rejects spaces, quoted params and lowercase tokens (we require uppercase).
+    e.g. '1,VI,0,0' -> ['1','VI','0','0']
+    """
+    if s is None:
         return []
+    s = s.strip()
+    if s == "":
+        return []
+
     res = []
     cur = []
-    in_q = False
+    in_quotes = False
     i = 0
     while i < len(s):
         ch = s[i]
+        # reject spaces anywhere
+        if ch == " ":
+            raise ValueError("SPACES_NOT_ALLOWED")
+        # disallow quotes entirely (option B)
         if ch == '"':
-            in_q = not in_q
-            i += 1
-            continue
-        if ch == ',' and not in_q:
-            res.append("".join(cur).strip())
+            raise ValueError("QUOTES_NOT_ALLOWED")
+        if ch == ',' and not in_quotes:
+            token = "".join(cur).strip()
+            if token == "":
+                # empty token not allowed
+                raise ValueError("EMPTY_PARAM")
+            res.append(token)
             cur = []
             i += 1
             continue
         cur.append(ch)
         i += 1
     if cur:
-        res.append("".join(cur).strip())
-    out = []
-    for p in res:
-        if len(p) >= 2 and p[0] == '"' and p[-1] == '"':
-            out.append(p[1:-1])
-        else:
-            out.append(p)
-    return out
+        token = "".join(cur).strip()
+        if token == "":
+            raise ValueError("EMPTY_PARAM")
+        res.append(token)
+
+    # Validate uppercase and no surrounding quotes (quotes already rejected)
+    for t in res:
+        if t != t.upper():
+            raise ValueError("LOWERCASE_NOT_ALLOWED")
+    return res
+
 
 # ---------- AT parsing ----------
-def parse_at_line(line):
+def parse_at_line(line: str):
+    """
+    Returns (cmd, params_list, is_query)
+    - requires commands uppercase and no spaces inside
+    - supports:
+        AT
+        AT+CMD
+        AT+CMD?
+        AT+CMD=arg1,arg2,...         -> set
+        AT+CMD=arg1,arg2?            -> query with args (e.g. AT+ROTOR=1?)
+    - For other commands parser behavior is unchanged.
+    """
     if not line:
         return None, None, None
     s = line.strip()
     if len(s) < 2 or s[:2].upper() != "AT":
         return None, None, None
+
     tail = s[2:].strip()
     if not tail:
         return "", [], False
+
+    # must start with '+' for extended commands
     if tail.startswith("+"):
-        tail = tail[1:].strip()
-    if tail.endswith("?"):
-        cmd = tail[:-1].strip().upper()
+        body = tail[1:]
+    else:
+        # bare AT or invalid
+        # if it's plain "AT" we handled earlier; otherwise treat as invalid
+        if tail == "":
+            return "", [], False
+        # treat "ATFOO" as invalid
+        return None, None, None
+
+    # Reject spaces inside body (we require no spaces at all in command)
+    if " " in body:
+        return None, None, None
+
+    # Case: contains '='
+    if "=" in body:
+        left, right = body.split("=", 1)
+        left = left.strip().upper()
+        right = right.strip()
+        # Support query-with-equals e.g. AT+ROTOR=1?  -> right endswith '?'
+        if right.endswith("?"):
+            raw = right[:-1]
+            # if raw is empty, treat as test syntax (not used here) -> return empty params and query True
+            if raw == "":
+                return left, [], True
+            try:
+                params = _split_params(raw)
+            except ValueError:
+                return left, None, None  # signal parse error
+            return left, params, True
+        else:
+            # normal assignment
+            try:
+                params = _split_params(right)
+            except ValueError:
+                return left, None, None
+            return left, params, False
+
+    # No '=' present
+    # Classic query: AT+CMD?
+    if body.endswith("?"):
+        cmd = body[:-1].strip().upper()
         return cmd, [], True
-    if "=" in tail:
-        left, right = tail.split("=", 1)
-        cmd = left.strip().upper()
-        params = _split_params(right)
-        return cmd, params, False
-    cmd = tail.split()[0].strip().upper()
+
+    # Bare command name
+    cmd = body.strip().upper()
     return cmd, [], False
 
 def unregister(name):

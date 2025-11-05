@@ -1,4 +1,4 @@
-
+import gc
 
 class DeviceState:
     _instance = None   # class-level storage
@@ -18,3 +18,22 @@ class DeviceState:
         if cls._instance is None:
             cls._instance = cls()
         return cls._instance
+    
+    def __setattr__(self, name, value):
+        # Get old value if exists
+        old_value = getattr(self, name, None)
+
+        # Normal attribute set
+        super().__setattr__(name, value)
+
+        # If it was changed (not same object)
+        if old_value is not None and old_value is not value:
+            # Dereference old object
+            del old_value
+            # Force memory cleanup
+            gc.collect()
+            # Optional debug log
+            print(f"[GC] Released old '{name}', collected memory")
+
+        # Optional trace
+        # print(f"[STATE] {name} = {value!r}")

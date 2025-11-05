@@ -5,8 +5,6 @@ It is designed to run both on desktop (CPython) and on microcontrollers such as 
 
 Its primary purpose is to host a fully configurable Enigma machine emulator on low-resource devices.
 
----
-
 ## ✨ Features
 
 - 🧠 **Write once, run everywhere**  
@@ -30,7 +28,6 @@ Its primary purpose is to host a fully configurable Enigma machine emulator on l
 - 🧹 **Automatic memory cleanup**  
   Optional GC hook after state changes (for low-RAM boards)
 
----
 
 ## 📦 Repository Structure
 
@@ -67,9 +64,9 @@ Expected output:
 Enigma Core is ready to accept inputs
 Available commands:
   AT - basic attention
-  AT+ENIGMA Set/Get the Enigma machine model: AT+ENIGMA=M3|M4  AT+ENIGMA?
-  AT+LED Control LED: AT+LED=0|1  AT+LED?
-  ...
+  AT+ENIGMA - Set/Get the Enigma machine model: AT+ENIGMA=M3|M4  AT+ENIGMA?
+  AT+HELP - Show this help
+  AT+LED - Control LED: AT+LED=0|1  AT+LED?
 OK
 ```
 

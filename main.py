@@ -19,25 +19,6 @@ def is_real_board():
 
 IS_BOARD = is_real_board()
 
-# Enigma machine imports
-from enigmapython.EnigmaM3 import EnigmaM3
-from enigmapython.EnigmaM3RotorI import EnigmaM3RotorI
-from enigmapython.EnigmaM3RotorII import EnigmaM3RotorII
-from enigmapython.EnigmaM3RotorIII import EnigmaM3RotorIII
-from enigmapython.EnigmaM3RotorIV import EnigmaM3RotorIV
-from enigmapython.EnigmaM3RotorV import EnigmaM3RotorV
-from enigmapython.EnigmaM3RotorVI import EnigmaM3RotorVI
-from enigmapython.EnigmaM3RotorVII import EnigmaM3RotorVII
-from enigmapython.EnigmaM3RotorVIII import EnigmaM3RotorVIII
-
-_enigma = None
-_etw = None
-_plugboard = None
-_rotor1 = None
-_rotor2 = None
-_rotor3 = None
-_reflector = None
-
 # Try uselect (MicroPython) or select (CPython)
 _uselect = None
 try:

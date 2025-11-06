@@ -29,8 +29,8 @@ rotor_bimap.put("V", EnigmaM3RotorV)
 rotor_bimap.put("VI", EnigmaM3RotorVI)
 rotor_bimap.put("VII", EnigmaM3RotorVII)
 rotor_bimap.put("VIII", EnigmaM3RotorVIII)
-rotor_bimap.put("BETA", EnigmaM4RotorBeta)
-rotor_bimap.put("GAMMA", EnigmaM4RotorGamma)
+rotor_bimap.put("B", EnigmaM4RotorBeta)
+rotor_bimap.put("G", EnigmaM4RotorGamma)
 
 @at_command("ROTOR", "Set/Get rotor configuration: AT+ROTOR=<index>,<type>,<ring>,<pos>  AT+ROTOR=<index>?")
 def  _rotor_cmd(params, is_query):
@@ -68,19 +68,18 @@ def  _rotor_cmd(params, is_query):
         if len(params) != 1:
             return False, "INVALID QUERY"
         
-        
+        # get rotor at index
         rotor = state.enigma.rotors[idx]
 
-        # if rotor {idx} is not set
+        # if rotor at index is not set
         if rotor is None:
             # ESP-AT style: indicate NONE if not set
             return True, f"+ROTOR: {idx},NONE"
         
         return True, f"+ROTOR: {idx},{rotor_bimap.inverse_get(rotor.__class__)},{rotor.ring},{rotor.position}"
 
-
+    # check number of params (should be 4 for SET)
     if len(params) != 4:
-        # If you meant index + 3, change to len(params) != 4 -> adjust comment. Current expects index + 3 body values -> len==4
         return False, "NEED 4 PARAMS"
 
     rotor_type = params[1]
@@ -105,6 +104,12 @@ def  _rotor_cmd(params, is_query):
         if idx > 3:
             return False, "INVALID ROTOR INDEX FOR M4"
         
+    rotor = rotor_bimap.get(rotor_type)
+
+    # if rotor type is unknown
+    if rotor is None:
+        return False, "UNKNOWN ROTOR TYPE"
+        
     # everything is OK, set Enigma rotor and return True
-    state.enigma.rotors[idx] = rotor_bimap.get(rotor_type)(ring,pos) 
+    state.enigma.rotors[idx] = rotor(ring,pos) 
     return True, None

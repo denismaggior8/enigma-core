@@ -10,7 +10,62 @@ class TestEnigmaCore(unittest.TestCase):
 
 
     def setUp(self):
-        DeviceState().reset()   # ensures fresh state before each test
+        DeviceState().reset() # ensures fresh state before each test
+
+    def test_at_set_rotor_i_m3(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=0,I,0,0")
+        self.assertIn("OK", out)
+    
+    def test_at_set_rotor_ii_m3(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=0,II,0,0")
+        self.assertIn("OK", out)
+
+    def test_at_set_rotor_iii_m3(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=0,III,0,0")
+        self.assertIn("OK", out)
+    
+    def test_at_set_rotor_iv_m3(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=0,IV,0,0")
+        self.assertIn("OK", out)
+
+    def test_at_set_rotor_v_m3(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=0,V,0,0")
+        self.assertIn("OK", out)
+
+    def test_at_set_rotor_vi_m3(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=0,VI,0,0")
+        self.assertIn("OK", out)
+
+    def test_at_set_rotor_vii_m3(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=0,VII,0,0")
+        self.assertIn("OK", out)
+    
+    def test_at_set_rotor_viii_m3(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=0,VIII,0,0")
+        self.assertIn("OK", out)
+
+    def test_at_set_rotor_b_m4(self):
+        process_line("AT+ENIGMA=M4")
+        out = process_line("AT+ROTOR=0,B,0,0")
+        self.assertIn("OK", out)
+
+    def test_at_set_rotor_b_m4(self):
+        process_line("AT+ENIGMA=M4")
+        out = process_line("AT+ROTOR=0,G,0,0")
+        self.assertIn("OK", out)
+
+    def test_at_set_unkwnow_rotor_m4(self):
+        process_line("AT+ENIGMA=M4")
+        out = process_line("AT+ROTOR=0,F,0,0")
+        self.assertIn("ERROR", out)
 
     def test_at_set_and_query_rotor(self):
         process_line("AT+ENIGMA=M3")

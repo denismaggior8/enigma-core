@@ -2,6 +2,12 @@
 from at_registry import at_command   # or from enigmacore import at_command if registry is there
 from device_state import DeviceState
 
+# Enigma machine imports
+from enigmapython.EnigmaM3 import EnigmaM3
+
+
+from enigmapython.EnigmaM4 import EnigmaM4
+
 @at_command("ROTOR", "Set/Get rotor configuration: AT+ROTOR=<index>,<type>,<ring>,<pos>  AT+ROTOR=<index>?")
 def  _rotor_cmd(params, is_query):
     """
@@ -52,9 +58,13 @@ def  _rotor_cmd(params, is_query):
     except Exception:
         return False, "INVALID NUMERIC PARAM"
 
-    # store in DeviceState.rotors dict
-    if not hasattr(state, "rotors") or state.rotors is None:
-        state.rotors = {}
-    state.rotors[idx] = (rotor_type, ring, pos)
+    # store in DeviceState
+    if isinstance(state.enigma, EnigmaM3):
+        pass
+    elif isinstance(state.enigma, EnigmaM4):
+        pass
+    
+
+    state.enigma.rotors[idx] = (rotor_type, ring, pos)
 
     return True, None

@@ -18,6 +18,13 @@ class TestEnigmaCore(unittest.TestCase):
     def test_at_set_and_get_enigma_m3(self):
         process_line("AT+ENIGMA=M3")
         self.assertEqual(process_line("AT+ENIGMA?"), "+ENIGMA: M3\r\nOK")
+        
+    def test_at_set_enigma_m4(self):
+        self.assertEqual(process_line("AT+ENIGMA=M4"), "OK")
+
+    def test_at_set_and_get_enigma_m4(self):
+        process_line("AT+ENIGMA=M4")
+        self.assertEqual(process_line("AT+ENIGMA?"), "+ENIGMA: M4\r\nOK")
 
     def test_at_enigma_query(self):
         self.assertEqual(process_line("AT+ENIGMA?"), "+ENIGMA: NONE\r\nOK")

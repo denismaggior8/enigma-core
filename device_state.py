@@ -16,14 +16,7 @@ class DeviceState:
         if self.__initialized:
             return
         self.__initialized = True
-
         self.enigma = None
-        self.etw = None
-        self.plugboard = None
-        self.rotor1 = None
-        self.rotor2 = None
-        self.rotor3 = None
-        self.reflector = None
 
     def reset(self):
         """Wipe all state and reinitialize singleton."""

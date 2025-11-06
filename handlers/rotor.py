@@ -80,7 +80,7 @@ def  _rotor_cmd(params, is_query):
     # everything is OK so far, store rotor in DeviceState
     elif isinstance(state.enigma, EnigmaM3):
         print("rotor: {} type: {}, ring: {}, pos: {}".format(idx, rotor_type, ring, pos))
-        #rotor = rotor_bimap.get(rotor_type)(pos,ring)  # validate rotor type
+        rotor = rotor_bimap.get(rotor_type)(pos,ring)  # validate rotor type
         #print(rotor)
     #    pass
     #elif isinstance(state.enigma, EnigmaM4):

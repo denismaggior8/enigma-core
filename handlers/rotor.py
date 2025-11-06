@@ -22,6 +22,15 @@ from enigmapython.EnigmaM4RotorGamma import EnigmaM4RotorGamma
 
 rotor_bimap = BiMap()
 rotor_bimap.put("I", EnigmaM3RotorI)
+rotor_bimap.put("II", EnigmaM3RotorII)
+rotor_bimap.put("III", EnigmaM3RotorIII)
+rotor_bimap.put("IV", EnigmaM3RotorIV)
+rotor_bimap.put("V", EnigmaM3RotorV)
+rotor_bimap.put("VI", EnigmaM3RotorVI)
+rotor_bimap.put("VII", EnigmaM3RotorVII)
+rotor_bimap.put("VIII", EnigmaM3RotorVIII)
+rotor_bimap.put("BETA", EnigmaM4RotorBeta)
+rotor_bimap.put("GAMMA", EnigmaM4RotorGamma)
 
 @at_command("ROTOR", "Set/Get rotor configuration: AT+ROTOR=<index>,<type>,<ring>,<pos>  AT+ROTOR=<index>?")
 def  _rotor_cmd(params, is_query):
@@ -50,16 +59,24 @@ def  _rotor_cmd(params, is_query):
 
     # QUERY: AT+ROTOR=<index>?
     if is_query:
+
+        # if enigma machine has not been configured yet
+        if state.enigma is None:
+            return False, "ENIGMA NOT CONFIGURED"   
+        
+        # no query param, invalid query
         if len(params) != 1:
             return False, "INVALID QUERY"
-        rotors = getattr(state, "rotors", None) or {}
-        cfg = rotors.get(idx)
-        if cfg is None:
+        
+        
+        rotor = state.enigma.rotors[idx]
+
+        # if rotor {idx} is not set
+        if rotor is None:
             # ESP-AT style: indicate NONE if not set
             return True, f"+ROTOR: {idx},NONE"
-        # cfg stored as tuple (type, ring, pos)
-        rotor_type, ring, pos = cfg
-        return True, f"+ROTOR: {idx},{rotor_type},{ring},{pos}"
+        
+        return True, f"+ROTOR: {idx},{rotor_bimap.inverse_get(rotor.__class__)},{rotor.ring},{rotor.position}"
 
 
     if len(params) != 4:
@@ -74,19 +91,20 @@ def  _rotor_cmd(params, is_query):
     except Exception:
         return False, "INVALID NUMERIC PARAM"
     
-    # if enigma machine has not configured before
-    if state.enigma is None:
-        return False, "ENIGMA NOT CONFIGURED"   
-    # everything is OK so far, store rotor in DeviceState
-    elif isinstance(state.enigma, EnigmaM3):
-        print("rotor: {} type: {}, ring: {}, pos: {}".format(idx, rotor_type, ring, pos))
-        rotor = rotor_bimap.get(rotor_type)(pos,ring)  # validate rotor type
-        #print(rotor)
-    #    pass
-    #elif isinstance(state.enigma, EnigmaM4):
-    #    pass
-    
+    # if index is negative
+    if idx < 0:
+        return False, "INVALID ROTOR INDEX"
 
-    #state.enigma.rotors[idx] = (rotor_type, ring, pos)
-
+    # if M3 machine type
+    if isinstance(state.enigma, EnigmaM3):
+        if idx > 2:
+            return False, "INVALID ROTOR INDEX FOR M3"
+        
+    # if M4 machine type
+    elif isinstance(state.enigma, EnigmaM4):
+        if idx > 3:
+            return False, "INVALID ROTOR INDEX FOR M4"
+        
+    # everything is OK, set Enigma rotor and return True
+    state.enigma.rotors[idx] = rotor_bimap.get(rotor_type)(ring,pos) 
     return True, None

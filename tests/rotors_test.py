@@ -14,12 +14,11 @@ class TestEnigmaCore(unittest.TestCase):
 
     def test_at_set_and_query_rotor(self):
         process_line("AT+ENIGMA=M3")
-        out = process_line("AT+ROTOR=1,VI,0,0")
-        # SET returns OK (no payload)
+        out = process_line("AT+ROTOR=1,I,0,0")
         self.assertIn("OK", out)
 
         out2 = process_line("AT+ROTOR=1?")
-        self.assertIn("+ROTOR: 1,VI,0,0", out2)
+        self.assertIn("+ROTOR: 1,I,0,0", out2)
         self.assertIn("OK", out2)
 
     def test_at_set_rotor_missing_index_param(self):
@@ -38,6 +37,20 @@ class TestEnigmaCore(unittest.TestCase):
         out = process_line("AT+ROTOR=1,VI,NN,0")
         self.assertIn("ERROR", out)
 
+    def test_at_set_negative_rotor_index(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=-1,VI,0,0")
+        self.assertIn("ERROR", out)
+
+    def test_at_set_outofbound_rotor_index_m3(self):
+        process_line("AT+ENIGMA=M3")
+        out = process_line("AT+ROTOR=3,I,0,0")
+        self.assertIn("ERROR", out)
+
+    def test_at_set_outofbound_rotor_index_m4(self):
+        process_line("AT+ENIGMA=M4")
+        out = process_line("AT+ROTOR=4,I,0,0")
+        self.assertIn("ERROR", out)
 
 
 if __name__ == "__main__":

@@ -16,17 +16,17 @@ class TestEnigmaReflectors(unittest.TestCase):
         # Reset the device state before each test
         DeviceState().reset()
 
-    def test_query_reflector_without_model(self):
+    def test_at_query_reflector_without_model(self):
         """Querying reflector without Enigma model should fail."""
         response = process_line("AT+REFLECTOR?")
         self.assertIn("ERROR", response)
 
-    def test_set_reflector_without_model(self):
+    def test_at_set_reflector_without_model(self):
         """Setting reflector without Enigma model should fail."""
         response = process_line("AT+REFLECTOR=B")
         self.assertIn("ERROR", response)
 
-    def test_set_reflector_for_m3(self):
+    def test_at_set_reflector_for_m3(self):
         """Set valid reflector for M3."""
         process_line("AT+ENIGMA=M3")
         out = process_line("AT+REFLECTOR=B")
@@ -34,13 +34,13 @@ class TestEnigmaReflectors(unittest.TestCase):
         out = process_line("AT+REFLECTOR?")
         self.assertEquals("+REFLECTOR: B\r\nOK", out)
 
-    def test_set_reflector_invalid_for_m3(self):
+    def test_at_set_reflector_invalid_for_m3(self):
         """Try to set invalid reflector for M3."""
         process_line("AT+ENIGMA=M3")
         response = process_line("AT+REFLECTOR=CT")
         self.assertIn("ERROR", response)
 
-    def test_set_reflector_for_m4(self):
+    def test_at_set_reflector_for_m4(self):
         """Set valid reflector for M4."""
         process_line("AT+ENIGMA=M4")
         out = process_line("AT+REFLECTOR=BT")
@@ -48,7 +48,7 @@ class TestEnigmaReflectors(unittest.TestCase):
         out = process_line("AT+REFLECTOR?")
         self.assertEquals("+REFLECTOR: BT\r\nOK", out)
 
-    def test_reflector_query_after_set(self):
+    def test_at_reflector_query_after_set(self):
         """Query reflector after setting it should show correct value."""
         process_line("AT+ENIGMA=M3")
         process_line("AT+REFLECTOR=C")
@@ -56,7 +56,7 @@ class TestEnigmaReflectors(unittest.TestCase):
         self.assertIn("+REFLECTOR: C", response)
         self.assertIn("OK", response)
 
-    def test_invalid_reflector_name(self):
+    def test_at_invalid_reflector_name(self):
         """Unknown reflector name must return error."""
         process_line("AT+ENIGMA=M3")
         response = process_line("AT+REFLECTOR=X")

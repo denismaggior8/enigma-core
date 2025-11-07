@@ -41,6 +41,13 @@ def  _rotor_cmd(params, is_query):
       QUERY: params = [index] and is_query=True
     Returns: (ok: bool, payload: str|None)
     """
+
+    state = DeviceState()
+
+    # if enigma machine has not been configured yet
+    if state.enigma is None:
+        return False, "ENIGMA NOT CONFIGURED"   
+
     # parse presence / errors
     if params is None:
         return False, "PARSE ERROR"
@@ -55,15 +62,9 @@ def  _rotor_cmd(params, is_query):
     except Exception:
         return False, "BAD INDEX"
 
-    state = DeviceState()
-
     # QUERY: AT+ROTOR=<index>?
     if is_query:
 
-        # if enigma machine has not been configured yet
-        if state.enigma is None:
-            return False, "ENIGMA NOT CONFIGURED"   
-        
         # no query param, invalid query
         if len(params) != 1:
             return False, "INVALID QUERY"
@@ -98,6 +99,9 @@ def  _rotor_cmd(params, is_query):
     if isinstance(state.enigma, EnigmaM3):
         if idx > 2:
             return False, "INVALID ROTOR INDEX FOR M3"
+        
+        if rotor_type == "B" or rotor_type == "G":
+            return False, "INVALID ROTOR FOR M3"
         
     # if M4 machine type
     elif isinstance(state.enigma, EnigmaM4):

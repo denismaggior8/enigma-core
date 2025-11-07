@@ -115,5 +115,5 @@ def  _rotor_cmd(params, is_query):
         return False, "UNKNOWN ROTOR TYPE"
         
     # everything is OK, set Enigma rotor and return True
-    state.enigma.rotors[idx] = rotor(ring,pos) 
+    state.enigma.add_rotor(idx, rotor(ring,pos))  
     return True, None

@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from main import process_line
 from device_state import DeviceState
 
-class TestEnigmaCore(unittest.TestCase):
+class TestEnigmaRotors(unittest.TestCase):
 
 
     def setUp(self):

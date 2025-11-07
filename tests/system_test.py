@@ -5,7 +5,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from main import process_line, _COMMANDS
 
-class TestEnigmaCore(unittest.TestCase):
+class TestEnigmaCoreSystem(unittest.TestCase):
     
     def test_at_basic(self):
         self.assertEqual(process_line("AT"), "OK")

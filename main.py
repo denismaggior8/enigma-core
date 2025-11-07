@@ -3,8 +3,11 @@
 import sys
 import time
 
+from device_state import DeviceState
 from at_registry import _COMMANDS, at_command
 import handlers  # triggers auto-import
+from enigmapython.EnigmaM3 import EnigmaM3
+from enigmapython.EnigmaM4 import EnigmaM4
 
 IS_MICROPY = sys.implementation.name == "micropython"
 
@@ -299,7 +302,16 @@ def run_loop(poll_interval=0.01, blocking_fallback_ok=True):
                     else:
                         _dispatch_at(cmd, params, is_query)
                 else:
-                    send_line("DATA RX: " + line)
+                    state = DeviceState.get()
+                    enigma = state.enigma
+
+                    # if enigma is None
+                    if enigma is None or enigma.reflector is None or (isinstance(enigma,EnigmaM3) and len(enigma.rotors) < 3) or (isinstance(enigma,EnigmaM4) and len(enigma.rotors) < 4):
+                        send_line("ENIGMA NOT SET UP FOR DATA\r\nERROR")
+                        continue
+                    send_line(enigma.input_string(line))
+
+                    
             time.sleep(poll_interval)
         except KeyboardInterrupt:
             if IS_BOARD:

@@ -27,11 +27,12 @@ class TestEnigmaReflectors(unittest.TestCase):
         self.assertIn("ERROR", response)
 
     def test_set_reflector_for_m3(self):
+        """Set valid reflector for M3."""
         process_line("AT+ENIGMA=M3")
         out = process_line("AT+REFLECTOR=B")
         self.assertIn("OK", out)
         out = process_line("AT+REFLECTOR?")
-        self.assertIn("OK", out)
+        self.assertEquals("+REFLECTOR: B\r\nOK", out)
 
     def test_set_reflector_invalid_for_m3(self):
         """Try to set invalid reflector for M3."""
@@ -45,7 +46,7 @@ class TestEnigmaReflectors(unittest.TestCase):
         out = process_line("AT+REFLECTOR=BT")
         self.assertIn("OK", out)
         out = process_line("AT+REFLECTOR?")
-        self.assertIn("OK", out)
+        self.assertEquals("+REFLECTOR: BT\r\nOK", out)
 
     def test_reflector_query_after_set(self):
         """Query reflector after setting it should show correct value."""

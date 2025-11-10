@@ -14,8 +14,8 @@ class TestEnigmaPlugboard(unittest.TestCase):
 
     def test_at_set_and_query_plugboard_m3(self):
         process_line("AT+ENIGMA=M3")
-        out = process_line("AT+PLUGBOARD=a,z")
-        self.assertEqual("+PLUGBOARD: az\r\nOK", out)
+        out = process_line("AT+PLUGBOARD=A,Z")
+        self.assertEqual(process_line("AT+PLUGBOARD?"), "+PLUGBOARD: zbcdefghijklmnopqrstuvwxya\r\nOK")
     
 if __name__ == "__main__":
     unittest.main()

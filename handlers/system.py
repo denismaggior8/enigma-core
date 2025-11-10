@@ -4,7 +4,7 @@ from at_registry import _COMMANDS, at_command
 @at_command("HELP", "Show this help")
 def _help_cmd(params, is_query):
     lines = ["Available commands:"]
-    lines.append("  AT - basic attention")
+    lines.append("  AT - basic attention (useless unless you are trying to talk to the machine)")
     for k in sorted(_COMMANDS.keys()):
         #if k == "HELP":
         #    continue

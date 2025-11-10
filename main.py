@@ -270,8 +270,8 @@ def process_line(line: str) -> str:
             else:
                 _dispatch_at(cmd, params, is_query)
         else:
-            cap_send("DATA RX: " + line)
-
+            cypher(line)
+        
         return "\r\n".join(out)
 
     finally:
@@ -302,14 +302,9 @@ def run_loop(poll_interval=0.01, blocking_fallback_ok=True):
                     else:
                         _dispatch_at(cmd, params, is_query)
                 else:
-                    state = DeviceState.get()
-                    enigma = state.enigma
-
-                    # if enigma is None
-                    if enigma is None or enigma.reflector is None or (isinstance(enigma,EnigmaM3) and len(enigma.rotors) < 3) or (isinstance(enigma,EnigmaM4) and len(enigma.rotors) < 4):
-                        send_line("ENIGMA NOT SET UP FOR DATA\r\nERROR")
+                    if not cypher(line):
                         continue
-                    send_line(enigma.input_string(line))
+                    
 
                     
             time.sleep(poll_interval)
@@ -324,6 +319,18 @@ def run_loop(poll_interval=0.01, blocking_fallback_ok=True):
                 send_line("LOOP ERROR: " + str(e))
             except Exception:
                 pass
+
+def cypher(line):
+    state = DeviceState.get()
+    enigma = state.enigma
+
+    # if enigma is None
+    if enigma is None or enigma.reflector is None or (isinstance(enigma,EnigmaM3) and len(enigma.rotors) < 3) or (isinstance(enigma,EnigmaM4) and len(enigma.rotors) < 4):
+        send_line("ENIGMA NOT SET UP FOR DATA\r\nERROR")
+        return False
+    send_line(enigma.input_string(line))
+    send_line("OK")
+    return True
 
 # ---------- If run as script ----------
 if __name__ == "__main__":

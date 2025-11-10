@@ -3,3 +3,4 @@ from . import enigma
 from . import system
 from . import rotor
 from . import reflector
+from . import plugboard

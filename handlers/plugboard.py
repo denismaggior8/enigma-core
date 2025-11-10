@@ -1,52 +1,33 @@
 from at_registry import at_command
 from device_state import DeviceState
 
-@at_command("PLUGBOARD")
-def handle_plugboard(params, is_query):
-    state = DeviceState()
+@at_command("PLUGBOARD", "Swap characters in the Enigma plugboard: AT+PLUGBOARD=<char to substitute>,<replacement char>  AT+PLUGBOARD?")
+def _plugboard_cmd(params, is_query):
+    """
+    AT+PLUGBOARD=<pair>     → sets a plugboard pair (e.g. a,z)
+    AT+PLUGBOARD?           → queries current plugboard configuration
+    """
 
-    # --- Query Mode ---
+    state = DeviceState.get()
+
+    if state.enigma is None:
+        return False, "ENIGMA NOT CONFIGURED"
+
     if is_query:
-        if not state.plugboard:
-            send_err("No plugboard connections set")
-            return
-        pairs = []
-        used = set()
-        for k, v in state.plugboard.items():
-            if k not in used:
-                pairs.append(f"{k}-{v}")
-                used.add(k)
-                used.add(v)
-        send_ok(",".join(pairs))
-        return
+        return True, "+PLUGBOARD: {}".format(state.enigma.plugboard.wiring)
 
-    # --- Set Mode ---
-    if not params or len(params) != 1:
-        send_err("Invalid parameters")
-        return
+    # --- SET MODE ---
+    if not params or len(params) != 2:
+        return False, "INVALID CHAR PAIR"
+    
+    a = params[0].lower()
+    b = params[1].lower()
+    
+     # Validate characters
+    if a not in state.enigma.alphabet_list or b not in state.enigma.alphabet_list:
+        return False, "INVALID CHAR/S"
 
-    pairs_str = params[0]
-    try:
-        pairs = [p.strip().upper() for p in pairs_str.split(",") if p.strip()]
-    except Exception:
-        send_err("Bad format")
-        return
+    # swap chars
+    state.enigma.plugboard.swap(a, b)
 
-    new_mapping = {}
-    used_letters = set()
-
-    for pair in pairs:
-        if len(pair) != 3 or pair[1] != '-':
-            send_err(f"Invalid pair '{pair}'")
-            return
-        a, b = pair[0], pair[2]
-        if a in used_letters or b in used_letters:
-            send_err(f"Duplicate letter in pair '{pair}'")
-            return
-        new_mapping[a] = b
-        new_mapping[b] = a
-        used_letters.update([a, b])
-
-    # store
-    state.plugboard = new_mapping
-    send_ok("Plugboard updated")
+    return True, None

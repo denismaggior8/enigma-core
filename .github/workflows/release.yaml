@@ -17,7 +17,6 @@ jobs:
 
       - name: Test
         run: |
-          cd enigma-core
           python tests/main.py
 
       - name: Install dependencies
@@ -30,12 +29,11 @@ jobs:
 
       - name: Compile firmware
         run: |
-          cd enigma-core
           ./build.sh
       
       - name: Create release archive
         run: |
-          cd enigma-core/dist
+          cd dist
           zip -r "enigma-core-v${{ env.VERSION }}.zip" .
 
       - name: Create Release

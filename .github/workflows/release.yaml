@@ -1,0 +1,34 @@
+name: Build MicroPython Firmware
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: sunnyvaleit/micropython-espressif-idf-builder-img:v1.26.1-v5.5
+      options: --user root
+
+    env:
+      VERSION: ${{ github.ref_name }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Compile firmware
+        run: |
+          
+
+      - name: Create Release
+        id: release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: Firmware ${VERSION}
+          files: dist/enigma-${{ env.VERSION }}.bin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

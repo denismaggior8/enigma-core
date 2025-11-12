@@ -1,5 +1,5 @@
-from at_registry import at_command
-from device_state import DeviceState
+from ..at_registry import at_command
+from ..device_state import DeviceState
 
 # Enigma machine imports
 from enigmapython.EnigmaM3 import EnigmaM3

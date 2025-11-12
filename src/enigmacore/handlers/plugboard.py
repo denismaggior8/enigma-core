@@ -1,5 +1,5 @@
-from at_registry import at_command
-from device_state import DeviceState
+from ..at_registry import at_command
+from ..device_state import DeviceState
 
 @at_command("PLUGBOARD", "Swap characters in the Enigma plugboard or retrive the Enigma plugboard wiring: AT+PLUGBOARD=<char to substitute>,<replacement char>  AT+PLUGBOARD?")
 def _plugboard_cmd(params, is_query):

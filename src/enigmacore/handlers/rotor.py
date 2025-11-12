@@ -1,7 +1,7 @@
 # handlers/rotor.py
-from at_registry import at_command   # or from enigmacore import at_command if registry is there
-from device_state import DeviceState
-from bimap import BiMap
+from ..at_registry import at_command   # or from enigmacore import at_command if registry is there
+from ..device_state import DeviceState
+from ..bimap import BiMap
 
 # Enigma rotor imports
 from enigmapython.Rotor import Rotor

@@ -2,9 +2,9 @@ import unittest
 import sys
 import os
 # Add parent folder (where enigmacore.py lives) to sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src/enigmacore")))
-from main import process_line
-from device_state import DeviceState
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
+from enigmacore.main import process_line
+from enigmacore.device_state import DeviceState
 
 class TestEnigmaCore(unittest.TestCase):
 

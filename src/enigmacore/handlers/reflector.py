@@ -1,8 +1,8 @@
 # handlers/reflector.py
 
-from at_registry import at_command 
-from device_state import DeviceState
-from bimap import BiMap
+from ..at_registry import at_command 
+from ..device_state import DeviceState
+from ..bimap import BiMap
 
 # Enigma reflector imports
 from enigmapython.EnigmaM3 import EnigmaM3

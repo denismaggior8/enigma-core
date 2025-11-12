@@ -1,4 +1,4 @@
-from at_registry import _COMMANDS, at_command
+from ..at_registry import _COMMANDS, at_command
 
 # ---------- Auto HELP ----------
 @at_command("HELP", "Show this help")

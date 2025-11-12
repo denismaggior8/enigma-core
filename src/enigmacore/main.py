@@ -3,9 +3,9 @@
 import sys
 import time
 
-from device_state import DeviceState
-from at_registry import _COMMANDS, at_command
-import handlers  # triggers auto-import
+from .device_state import DeviceState
+from .at_registry import _COMMANDS, at_command
+import enigmacore.handlers  
 from enigmapython.EnigmaM3 import EnigmaM3
 from enigmapython.EnigmaM4 import EnigmaM4
 
@@ -42,7 +42,7 @@ except Exception:
 
 # ---------- import AT handlers ----------
 def load_handlers():
-    import handlers
+    import enigmacore.handlers
 
 # ---------- Output helpers ----------
 def send_line(s):

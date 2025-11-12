@@ -1,4 +1,4 @@
-from at_registry import at_command
+from ..at_registry import at_command
 
 # ---------- Example LED ----------
 try:

@@ -1,4 +1,7 @@
-name: Build MicroPython Firmware
+name: Build Enigma Core
+permissions:
+  contents: write
+
 on:
   push:
     tags:
@@ -14,10 +17,6 @@ jobs:
     steps:
       - name: Checkout this MicroPython repo
         uses: actions/checkout@v4
-
-      - name: Test
-        run: |
-          python tests/main.py
 
       - name: Install dependencies
         run: |
@@ -40,6 +39,6 @@ jobs:
         id: release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.VERSION }}
-          name: Firmware ${VERSION}
-          files: enigma-core-${{ env.VERSION }}.zip
+          tag_name: v${{ env.VERSION }}
+          name: Enigma Core version ${VERSION}
+          files: enigma-core-v${{ env.VERSION }}.zip

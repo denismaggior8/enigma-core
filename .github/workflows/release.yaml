@@ -33,7 +33,7 @@ jobs:
       - name: Create release archive
         run: |
           cd dist
-          zip -r "../enigma-core-v${{ env.VERSION }}.zip" .
+          zip -r "../enigma-core-${{ env.VERSION }}.zip" .
 
       - name: Create Release
         id: release

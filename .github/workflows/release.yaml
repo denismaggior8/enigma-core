@@ -7,21 +7,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: sunnyvaleit/micropython-espressif-idf-builder-img:v1.26.1-v5.5
-      options: --user root
 
     env:
       VERSION: ${{ github.ref_name }}
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - name: Checkout this MicroPython repo
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git jq wget 
+      
+      - name: Install MicroPython
+        uses: BrianPugh/install-micropython@v2
 
       - name: Compile firmware
         run: |
-          
+          cd enigma-core
+          ./build.sh
+      
+      - name: Create release archive
+        run: |
+          cd enigma-core/dist
+          zip -r "enigma-core-v${{ env.VERSION }}.zip" .
 
       - name: Create Release
         id: release
@@ -29,6 +39,4 @@ jobs:
         with:
           tag_name: ${{ env.VERSION }}
           name: Firmware ${VERSION}
-          files: dist/enigma-${{ env.VERSION }}.bin
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          files: enigma-core-${{ env.VERSION }}.zip

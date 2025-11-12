@@ -15,6 +15,11 @@ jobs:
       - name: Checkout this MicroPython repo
         uses: actions/checkout@v4
 
+      - name: Test
+        run: |
+          cd enigma-core
+          python tests/main.py
+
       - name: Install dependencies
         run: |
           sudo apt update

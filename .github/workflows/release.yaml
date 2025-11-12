@@ -40,5 +40,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.VERSION }}
-          name: Enigma Core version ${VERSION}
+          name: Enigma Core version ${{ env.VERSION }}
           files: enigma-core-${{ env.VERSION }}.zip

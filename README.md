@@ -71,3 +71,29 @@ OK
 ```
 
 Press CTRL-C to exit.
+
+
+## Upload Enigma Core on a ESP32-like board
+
+To upload this firmware on a ESP32-like board, follow (as an example) the steps below:
+
+```console
+# Install Python required modules
+pip install esptool 
+pip install adafruit-ampy
+
+# Set ESPPORT variable
+export ESPPORT=/dev/tty.usbserial-0001 # Should be valid on Mac but double check to match yours
+
+# Erase the board flash
+python -m esptool --chip esp32 erase_flash    
+
+# Upload MicroPython firmware
+python -m esptool --baud 460800 write_flash 0x1000 ESP32_GENERIC-20250911-v1.26.1.bin # Download the MicroPython binary from https://micropython.org/download/
+
+# Upload Enigma Core (this may take a while)
+cd dist                                                                                                                                  
+find . -type d -exec ampy --port $ESPPORT mkdir {} \; 2>/dev/null
+find . -type f -exec ampy --port $ESPPORT put {} {} \;
+cd ..
+```

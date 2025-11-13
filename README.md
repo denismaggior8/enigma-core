@@ -1,9 +1,10 @@
 # Enigma Core
 
-**Enigma Core** is a standalone, embedded-ready AT command framework written in pure Python / MicroPython.  
-It is designed to run both on desktop (CPython) and on microcontrollers such as ESP32 and RP2040, with identical behavior.
+**Enigma Core** is a standalone, embedded-ready, Enigma machine simulator configurable via AT commands over serial line, written in pure Python.  
 
-Its primary purpose is to host a fully configurable Enigma machine emulator on low-resource devices.
+It is designed to run both on desktop (CPython) and on microcontrollers such as ESP32 and RP2040 (MicroPython), with identical behavior.
+
+Its primary purpose is to transform a low-resource device into a complete and historically accurate Enigma machine.
 
 ## ✨ Features
 
@@ -73,7 +74,7 @@ OK
 Press CTRL-C to exit.
 
 
-## Upload Enigma Core on a ESP32-like board
+## 📟 Flash/use Enigma Core on devices
 
 To upload this firmware on a ESP32-like board, follow (as an example) the steps below:
 

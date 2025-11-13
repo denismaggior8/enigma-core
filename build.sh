@@ -17,7 +17,13 @@ do
         echo "Processing file $file ..."
         if [[ $file == *.py ]];
         then
-            mpy-cross $file -o ../$BUILD_DIR/$(echo $file | sed 's/\.py$/\.mpy/')
+            if [[ $file != "./main.py" ]] && [[ $file != "./boot.py" ]]; then
+                echo "Compiling"
+                mpy-cross $file -o ../$BUILD_DIR/$(echo $file | sed 's/\.py$/\.mpy/')
+            else
+                echo "Copying, not compiling"
+                cp $file ../$BUILD_DIR/$file
+            fi
         fi
     fi
 done

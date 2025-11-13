@@ -97,3 +97,25 @@ find . -type d -exec ampy --port $ESPPORT mkdir {} \; 2>/dev/null
 find . -type f -exec ampy --port $ESPPORT put {} {} \;
 cd ..
 ```
+
+To connect to the board, type
+
+```console
+mpremote connect $ESPPORT
+```
+
+You should get a prompt like this:
+
+
+```console
+Connected to MicroPython at /dev/tty.usbserial-0001
+Use Ctrl-] or Ctrl-x to exit this shell
+�0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:4112
+load:0x40078000,len:15072
+load:0x40080400,len:4
+load:0x40080404,len:3332
+entry 0x400805ac
+Enigma Core is ready to accept inputs
+```

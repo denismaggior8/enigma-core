@@ -13,9 +13,4 @@ python -m esptool --baud 460800 --port $ESPPORT write-flash 0x1000 $MICROPYTHON_
 # Wait for reset to be completed
 sleep 10
 
-# Upload Enigma Core (this may take a while)
-echo "Transferring Enigma Core..."
-cd dist                                                                                                                                  
-find . -type d -exec ampy --port $ESPPORT mkdir {} \; 2>/dev/null
-find . -type f -exec ampy --port $ESPPORT put {} {} \;
-cd ..
+./copy.sh

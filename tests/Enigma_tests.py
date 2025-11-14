@@ -38,6 +38,15 @@ class TestEnigmaCore(unittest.TestCase):
         process_line("AT+REFLECTOR=B")
         self.assertEqual(process_line("ciao"), "kjtq\r\nOK")
 
+    # echo "AT+ENIGMA=M3\r\nAT+REFLECTOR=B\r\nAT+ROTOR=0,I,0,0\r\nAT+ROTOR=1,II,0,0\r\nAT+ROTOR=2,III,0,0\r\nCIAO" | python main.py
+    def test_at_enigma_cypher_III_upper_m3(self):
+        process_line("AT+ENIGMA=M3")
+        process_line("AT+ROTOR=0,I,0,0")
+        process_line("AT+ROTOR=1,II,0,0")
+        process_line("AT+ROTOR=2,III,0,0")
+        process_line("AT+REFLECTOR=B")
+        self.assertEqual(process_line("CIAO"), "kjtq\r\nOK")
+
 
 if __name__ == "__main__":
     unittest.main()

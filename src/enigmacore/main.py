@@ -270,7 +270,7 @@ def process_line(line: str) -> str:
             else:
                 _dispatch_at(cmd, params, is_query)
         else:
-            cypher(line)
+            cypher(line.lower())
         
         return "\r\n".join(out)
 
@@ -328,7 +328,7 @@ def cypher(line):
     if enigma is None or enigma.reflector is None or (isinstance(enigma,EnigmaM3) and len(enigma.rotors) < 3) or (isinstance(enigma,EnigmaM4) and len(enigma.rotors) < 4):
         send_line("ENIGMA NOT SET UP FOR DATA\r\nERROR")
         return False
-    send_line(enigma.input_string(line))
+    send_line(enigma.input_string(line.lower()))
     send_line("OK")
     return True
 

@@ -1,6 +1,6 @@
 SRC_DIR="src"
 BUILD_DIR="dist"
-ENIGMA_PYTHON_VERSION="1.3.1"
+ENIGMA_PYTHON_VERSION="1.3.0"
 
 cd $SRC_DIR
 for file in $(find . | grep -v __pycache__); 

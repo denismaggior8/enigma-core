@@ -16,8 +16,8 @@ from enigmapython.ReflectorUKWCThin import ReflectorUKWCThin
 
 
 reflector_bimap = BiMap()
-reflector_bimap.put("B", ReflectorUKWC)
-reflector_bimap.put("C", ReflectorUKWB)
+reflector_bimap.put("B", ReflectorUKWB)
+reflector_bimap.put("C", ReflectorUKWC)
 reflector_bimap.put("BT", ReflectorUKWBThin)
 reflector_bimap.put("CT", ReflectorUKWCThin)
 

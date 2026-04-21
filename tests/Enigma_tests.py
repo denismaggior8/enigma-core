@@ -29,14 +29,32 @@ class TestEnigmaCore(unittest.TestCase):
     def test_at_enigma_query_null(self):
         self.assertEqual(process_line("AT+ENIGMA?"), "+ENIGMA: NONE\r\nOK")
 
-    # echo "AT+ENIGMA=M3\r\nAT+REFLECTOR=B\r\nAT+ROTOR=0,I,0,0\r\nAT+ROTOR=1,II,0,0\r\nAT+ROTOR=2,III,0,0\r\nciao" | python main.py
-    def test_at_enigma_cypher_III_m3(self):
+    # echo "AT+ENIGMA=M3\r\nAT+REFLECTOR=C\r\nAT+ROTOR=0,I,0,0\r\nAT+ROTOR=1,II,0,0\r\nAT+ROTOR=2,III,0,0\r\nciao" | python main.py
+    def test_at_enigma_cypher_III_m3_rc(self):
+        process_line("AT+ENIGMA=M3")
+        process_line("AT+ROTOR=0,I,0,0")
+        process_line("AT+ROTOR=1,II,0,0")
+        process_line("AT+ROTOR=2,III,0,0")
+        process_line("AT+REFLECTOR=C")
+        self.assertEqual(process_line("ciao"), "kjtq\r\nOK")
+
+    # echo "AT+ENIGMA=M3\r\nAT+REFLECTOR=C\r\nAT+ROTOR=0,I,0,0\r\nAT+ROTOR=1,II,0,0\r\nAT+ROTOR=2,III,0,0\r\nCIAO" | python main.py
+    def test_at_enigma_cypher_III_upper_m3_rc(self):
+        process_line("AT+ENIGMA=M3")
+        process_line("AT+ROTOR=0,I,0,0")
+        process_line("AT+ROTOR=1,II,0,0")
+        process_line("AT+ROTOR=2,III,0,0")
+        process_line("AT+REFLECTOR=C")
+        self.assertEqual(process_line("CIAO"), "kjtq\r\nOK")
+
+        # echo "AT+ENIGMA=M3\r\nAT+REFLECTOR=B\r\nAT+ROTOR=0,I,0,0\r\nAT+ROTOR=1,II,0,0\r\nAT+ROTOR=2,III,0,0\r\nciao" | python main.py
+    def test_at_enigma_cypher_III_m3_rb(self):
         process_line("AT+ENIGMA=M3")
         process_line("AT+ROTOR=0,I,0,0")
         process_line("AT+ROTOR=1,II,0,0")
         process_line("AT+ROTOR=2,III,0,0")
         process_line("AT+REFLECTOR=B")
-        self.assertEqual(process_line("ciao"), "kjtq\r\nOK")
+        self.assertEqual(process_line("ciao"), "pqzz\r\nOK")
 
 
 if __name__ == "__main__":

@@ -270,7 +270,7 @@ def process_line(line: str) -> str:
             else:
                 _dispatch_at(cmd, params, is_query)
         else:
-            cypher(line)
+            cypher(line.lower())
         
         return "\r\n".join(out)
 
@@ -324,11 +324,28 @@ def cypher(line):
     state = DeviceState.get()
     enigma = state.enigma
 
-    # if enigma is None
     if enigma is None or enigma.reflector is None or (isinstance(enigma,EnigmaM3) and len(enigma.rotors) < 3) or (isinstance(enigma,EnigmaM4) and len(enigma.rotors) < 4):
         send_line("ENIGMA NOT SET UP FOR DATA\r\nERROR")
         return False
-    send_line(enigma.input_string(line))
+    
+    import gc
+    out = ""
+    for char in line.lower():
+        out += enigma.input_char(char)
+        # Prevent MicroPython OOM by clearing journals
+        try:
+            enigma.clear_journal()
+            enigma.plugboard.clear_journal()
+            enigma.etw.clear_journal()
+            enigma.reflector.clear_journal()
+            for r in enigma.rotors:
+                if r is not None:
+                    r.clear_journal()
+            gc.collect()
+        except Exception:
+            pass
+
+    send_line(out)
     send_line("OK")
     return True
 

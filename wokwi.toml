@@ -1,4 +1,4 @@
 [wokwi]
 version = 1
-firmware = 'enigma-core_firmware_RPI_PICO.uf2'
+firmware = 'enigma-core_firmware_v1.0.1_RPI_PICO.uf2'
 elf = '.build/micropython/ports/rp2/build-RPI_PICO/firmware.elf'

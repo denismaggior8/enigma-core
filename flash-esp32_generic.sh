@@ -1,4 +1,4 @@
-export ESPPORT=/dev/tty.usbserial-0001 # Should be valid on Mac but double check to match yours
+export ESPPORT=/dev/tty.usbmodem101 # Should be valid on Mac but double check to match yours
 export MICROPYTHON_BIN=ESP32_GENERIC-20250911-v1.26.1.bin
 
 # (Optionally) re-build the application
